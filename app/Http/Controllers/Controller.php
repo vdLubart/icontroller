@@ -15,12 +15,55 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
+     * Return calendar data in json format
+     *
      * @param GenerateCalendarRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function generateCalendar(GenerateCalendarRequest $request): JsonResponse {
-        $year = $request->year;
+    public function showCalendar(GenerateCalendarRequest $request): JsonResponse {
+        return response()->json($this->generateCalendar($request->year));
+    }
+
+    /**
+     * Export calendar data to the csv file
+     *
+     * @param int $year
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function exportCalendar(int $year) {
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=file.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $data = $this->generateCalendar($year);
+        $columns = array('Month', 'Salary Date', 'Bonus Date');
+
+        $callback = function() use ($data, $columns)
+        {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach($data as $line) {
+                fputcsv($file, array($line['month'], $line['salaryDate'], $line['bonusDate']));
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Generate calendar data
+     *
+     * @param int $year
+     * @return array
+     */
+    private function generateCalendar(int $year): array {
         $calendar = [];
         foreach (range(1, 12) as $month){
             $salaryDate = Payment::salaryDate($month, $year);
@@ -32,6 +75,6 @@ class Controller extends BaseController
             ];
         }
 
-        return response()->json($calendar);
+        return $calendar;
     }
 }

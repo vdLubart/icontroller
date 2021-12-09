@@ -1,9 +1,13 @@
 <template>
     <div id="app">
-        <div id="yearSelector">
-            <select name="year" id="year" v-model="year" @change="selectYear">
-                <option v-for="y in years" :value="y">{{ y }}</option>
-            </select>
+        <div class="wrapper">
+            <div class="yearSelector">
+                <select name="year" id="year" v-model="year" @change="selectYear">
+                    <option v-for="y in years" :value="y">{{ y }}</option>
+                </select>
+
+                <a :href='"/export/" + year' target="_blank">Export Calendar</a>
+            </div>
         </div>
 
         <table-component
@@ -53,5 +57,17 @@
 </script>
 
 <style>
+    .wrapper{
+        width: 100%;
+    }
 
+    .yearSelector {
+        width: 25%;
+        margin: 50px auto;
+        height: 30px;
+    }
+
+    .yearSelector a{
+        float:right;
+    }
 </style>

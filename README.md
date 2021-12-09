@@ -11,3 +11,8 @@ After cloning application to the server the following actions should be run:
 
 - `npm install` to install javascript dependencies. This part is needed only for the development version
 
+## Testing
+
+The solution includes the PHPUnit tests. To run the test script please run the following command:
+
+`phpunit`

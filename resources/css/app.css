@@ -1,7 +1,1 @@
 @import 'vue-table-component/docs/table-component.css';
-
-#yearSelector {
-    width: 0%;
-    margin: 100px auto;
-    height: 50px;
-}

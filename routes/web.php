@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/export/{year}', [\App\Http\Controllers\Controller::class, 'exportCalendar'])->where('year', '20\d{2}');

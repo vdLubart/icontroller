@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/calendar', [\App\Http\Controllers\Controller::class , 'generateCalendar']);
+Route::post('/calendar', [\App\Http\Controllers\Controller::class , 'showCalendar']);
